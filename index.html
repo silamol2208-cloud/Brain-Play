@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="Th">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Brain Play</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+                <!-- แถบnavigation -->
+        <nav id="navbar">
+            <div class="nav-logo" onclick="showScreen('home')">🎮 Brain Play</div>
+            <div class="nav-right">
+            <button class="nav-btn" onclick="showScreen('home')">🏠 หน้าหลัก</button>
+            <button class="nav-btn" onclick="showScreen('scores')">🏆 คะแนน</button>
+            <!-- ปุ่มสลับธีม มืด/สว่าง -->
+            <button class="nav-btn nav-theme-btn" id="theme-btn" onclick="toggleTheme()">
+                <span id="theme-icon">☀️</span>
+            </button>
+            </div>
+        </nav>
+        
+        <!-- หน้าหลัก -->
+        <div id="screen-home" class="screen active">
+            <div class="home-hero">
+            <h1 class="hero-title">🎮 Brain Play</h1>
+            <p class="hero-sub">ห้าเกมพัฒนาสมอง หนึ่งกระดานคะแนน สนุกไม่รู้จบ</p>
+            </div>
+        
+            <div class="game-grid">
+        
+            <!-- เสียงสัตว์ -->
+            <div class="game-card" onclick="startGame('sound')">
+                <div class="card-icon">🔊</div>
+                <div class="card-body">
+                <h2>จำเสียงสัตว์</h2>
+                <p>ฟังเสียงสัตว์แล้วเลือกให้ถูก!</p>
+                <div class="card-tag">ความจำ · เสียง</div>
+                </div>
+                <div class="card-arrow">▶</div>
+            </div>
+        
+            <!-- อย่าจำภาพต้องห้าม -->
+            <div class="game-card" onclick="startGame('dontremember')">
+                <div class="card-icon">🚫</div>
+                <div class="card-body">
+                <h2>อย่าจำนะ!</h2>
+                <p>อย่าจำภาพต้องห้าม แล้วเลือกให้ถูก!</p>
+                <div class="card-tag">กลลวง · สมาธิ</div>
+                </div>
+                <div class="card-arrow">▶</div>
+            </div>
+        
+            <!-- อิโมจิไพ่ -->
+            <div class="game-card" onclick="startGame('mahjong')">
+                <div class="card-icon">🀄</div>
+                <div class="card-body">
+                <h2>อิโมจิไพ่</h2>
+                <p>พลิกไพ่และจับคู่อิโมจิทั้ง 6 คู่!</p>
+                <div class="card-tag">ความจำ · จับคู่</div>
+                </div>
+                <div class="card-arrow">▶</div>
+            </div>
+        
+            <!-- หาภาพต่าง -->
+            <div class="game-card" onclick="startGame('difference')">
+                <div class="card-icon">🔍</div>
+                <div class="card-body">
+                <h2>หาภาพต่าง</h2>
+                <p>หาความแตกต่างระหว่างสองภาพ!</p>
+                <div class="card-tag">สังเกต · ความเร็ว</div>
+                </div>
+                <div class="card-arrow">▶</div>
+            </div>
+        
+            <!-- เต้นตาม -->
+            <div class="game-card" onclick="startGame('justmove')">
+                <div class="card-icon">🕺</div>
+                <div class="card-body">
+                <h2>เต้นตามนะ!</h2>
+                <p>ทำท่าตามภาพแล้วกด ต่อไป!</p>
+                <div class="card-tag">ออกกำลัง · เต้น</div>
+                </div>
+                <div class="card-arrow">▶</div>
+            </div>
+        
+            </div>
+        </div>
+        
+        
+        <!-- คะแนน -->
+        <div id="screen-scores" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="showScreen('home')">← กลับ</button>
+            <h1>🏆 คะแนนสูงสุด</h1>
+            </div>
+            <!-- ตารางคะแนนสร้างโดย JS -->
+            <div class="scores-grid" id="scores-grid"></div>
+            <div class="scores-actions">
+            <button class="btn-danger" onclick="clearScores()">🗑 ล้างคะแนนทั้งหมด</button>
+            </div>
+        </div>
+        
+        
+        <!-- จำเสียงสัตว์ -->
+        <div id="screen-sound" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="exitGame()">← ออก</button>
+            <h1>🔊 จำเสียงสัตว์</h1>
+            <div class="score-display">คะแนน: <span id="sound-score">0</span></div>
+            </div>
+            <div class="game-area">
+            <div class="sound-info">
+                <p id="sound-prompt">กด เล่นเสียง แล้วเลือกสัตว์ให้ถูก!</p>
+                <div class="sound-round">รอบ <span id="sound-round">1</span> / <span id="sound-total">10</span></div>
+            </div>
+            <button class="btn-play-sound" id="sound-play-btn" onclick="soundPlayCurrent()">🔊 เล่นเสียง</button>
+            <!-- ปุ่มตัวเลือกสร้างโดย JS -->
+            <div class="sound-choices" id="sound-choices"></div>
+            <div id="sound-feedback" class="feedback-msg"></div>
+            </div>
+        </div>
+        
+        
+        <!-- อย่าจำ -->
+        <div id="screen-dontremember" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="exitGame()">← ออก</button>
+            <h1>🚫 อย่าจำนะ!</h1>
+            <div class="score-display">คะแนน: <span id="dr-score">0</span></div>
+            </div>
+            <div class="game-area">
+        
+            <!-- ดูภาพ -->
+            <div id="dr-phase-study" class="dr-phase">
+                <div class="dr-instruction">
+                <h2 id="dr-forbidden-label">❌ ห้ามจำภาพนี้:</h2>
+                <div class="dr-forbidden-card" id="dr-forbidden-display"></div>
+                </div>
+                <div class="dr-study-pictures" id="dr-study-pictures"></div>
+                <button class="btn-primary" id="dr-ready-btn" onclick="drStartTest()">พร้อมแล้ว! ✔</button>
+            </div>
+        
+            <!-- ตอบ -->
+            <div id="dr-phase-test" class="dr-phase hidden">
+                <h2>ภาพไหนที่บอกว่า ห้ามจำ?</h2>
+                <div class="dr-test-pictures" id="dr-test-pictures"></div>
+                <div id="dr-feedback" class="feedback-msg"></div>
+            </div>
+        
+            <div class="dr-round-info">รอบ <span id="dr-round">1</span> / <span id="dr-total">8</span></div>
+            </div>
+        </div>
+        
+        
+        <!-- อิโมจิไพ่ -->
+        <div id="screen-mahjong" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="exitGame()">← ออก</button>
+            <h1>🀄 อิโมจิไพ่</h1>
+            <div class="mahjong-meta">
+                <div class="score-display">คะแนน: <span id="mj-score">0</span></div>
+                <div class="score-display">⏱ <span id="mj-timer">0</span>วิ</div>
+                <div class="score-display">คู่: <span id="mj-matched">0</span>/<span id="mj-total-pairs">6</span></div>
+            </div>
+            </div>
+            <div class="game-area">
+            <div class="mj-controls">
+                <button class="btn-secondary" onclick="mahjongHint()">💡 คำใบ้ (-5 แต้ม)</button>
+                <button class="btn-primary"   onclick="startGame('mahjong')">🔄 เกมใหม่</button>
+            </div>
+            <!-- กระดานไพ่ใน JS -->
+            <div class="mj-board" id="mj-board"></div>
+            <p class="mj-tip">พลิกไพ่หาคู่ที่เหมือนกัน ถ้าผิดไพ่จะพลิกกลับ!</p>
+            </div>
+        </div>
+        
+        
+        <!-- หาภาพต่าง
+        
+            วิธีใส่รูปของตัวเอง:
+            1. วางไฟล์รูปในโฟลเดอร์ images/
+            2. แก้ไข DIFF_SCENES ใน app.js-->
+        <div id="screen-difference" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="exitGame()">← ออก</button>
+            <h1>🔍 หาภาพต่าง</h1>
+            <div class="diff-meta">
+                <div class="score-display">คะแนน: <span id="diff-score">0</span></div>
+                <div class="score-display">⏱ <span id="diff-timer">60</span>วิ</div>
+                <div class="score-display">เจอ: <span id="diff-found">0</span>/<span id="diff-total-diffs">5</span></div>
+            </div>
+            </div>
+            <div class="game-area">
+            <p class="diff-instruction">แตะจุดที่ต่างในภาพ ข!</p>
+            <div class="diff-scenes">
+        
+                <!-- ภาพ ก -->
+                <div class="diff-scene-wrap">
+                <p class="scene-label">ภาพ ก</p>
+                <div class="diff-img-wrap" id="diff-wrap-a">
+                    <img id="diff-img-a" src="" alt="ภาพ ก" draggable="false" />
+                </div>
+                </div>
+        
+                <!-- ภาพ ข (แตะที่นี่) -->
+                <div class="diff-scene-wrap">
+                <p class="scene-label">ภาพ ข — แตะที่นี่!</p>
+                <div class="diff-img-wrap" id="diff-wrap-b">
+                    <img id="diff-img-b" src="" alt="ภาพ ข" draggable="false" />
+                    <!-- overlay วาดจุดใน JS -->
+                    <div class="diff-overlay" id="diff-overlay"></div>
+                </div>
+                </div>
+        
+            </div>
+            <div id="diff-feedback" class="feedback-msg"></div>
+            <button class="btn-primary" id="diff-next-btn" onclick="diffNextLevel()" style="display:none">ด่านต่อไป →</button>
+            </div>
+        </div>
+        
+        
+        <!-- เต้นตาม -->
+        <div id="screen-justmove" class="screen">
+            <div class="screen-header">
+            <button class="back-btn" onclick="exitGame()">← ออก</button>
+            <h1>🕺 เต้นตามนะ!</h1>
+            <div class="score-display">คะแนน: <span id="jm-score">0</span></div>
+            </div>
+            <div class="game-area">
+            <div class="jm-progress">
+                ท่า <span id="jm-current">1</span> จาก <span id="jm-total">8</span>
+            </div>
+            <div class="jm-stage">
+                <div class="jm-pose-card" id="jm-pose-card">
+                <div class="jm-pose-emoji"       id="jm-pose-emoji">🙆</div>
+                <div class="jm-pose-name"        id="jm-pose-name">กำลังโหลด...</div>
+                <div class="jm-pose-instruction" id="jm-pose-instruction">เตรียมตัวให้พร้อม!</div>
+                </div>
+                <!-- แถบความคืบหน้า -->
+                <div class="jm-beat-bar">
+                <div class="jm-beat-fill" id="jm-beat-fill"></div>
+                </div>
+            </div>
+            <button class="btn-big" id="jm-continue-btn" onclick="jmNext()">✅ เสร็จแล้ว! ต่อไป →</button>
+            <div id="jm-feedback" class="feedback-msg"></div>
+            </div>
+        </div>
+        
+        
+        <!-- จบเกม (modal) -->
+        <div id="gameover-modal" class="modal hidden">
+            <div class="modal-box">
+            <div class="modal-emoji" id="modal-emoji">🎉</div>
+            <h2 id="modal-title">เกมจบแล้ว!</h2>
+            <p>คะแนนของคุณ: <strong id="modal-score">0</strong></p>
+            <p id="modal-hs" class="modal-hs"></p>
+            <div class="modal-actions">
+                <button class="btn-primary"   id="modal-play-again">▶ เล่นอีกครั้ง</button>
+                <button class="btn-secondary" onclick="goHomeFromModal()">🏠 หน้าหลัก</button>
+            </div>
+            </div>
+        </div>
+
+        <script src="app.js"></script>
+    </body>
+</html>
